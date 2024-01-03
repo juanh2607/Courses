@@ -27,6 +27,33 @@ class Car {
    * Update the position of the car
    */
   update() {
+    this.#move();
+  }
+
+  /**
+   * @param {CanvasRenderingContext2D} ctx 
+   */
+  draw(ctx) {
+    // Save current state because we will translate and rotate the canvas for 
+    // this particular draw.
+    ctx.save(); 
+    // Rotate car by rotating first the canvas and then drawing the car
+    ctx.translate(this.x, this.y); // Center the context where we have the car
+    ctx.rotate(-this.angle);
+
+    ctx.beginPath();
+    ctx.rect( // Already at center of car thanks to ctx.translate
+      -this.width/2,
+      -this.height/2,
+      this.width,
+      this.height
+    );
+    ctx.fill();
+
+    ctx.restore(); // Otherwise we translate and rotate on each frame
+  }
+
+  #move() {
     // Up and down controls
     if (this.controls.forward)
       this.speed += this.acceleration;
@@ -57,28 +84,5 @@ class Car {
     
     this.x -= this.speed * Math.sin(this.angle);
     this.y -= this.speed * Math.cos(this.angle);
-  }
-
-  /**
-   * @param {CanvasRenderingContext2D} ctx 
-   */
-  draw(ctx) {
-    // Save current state because we will translate and rotate the canvas for 
-    // this particular draw.
-    ctx.save(); 
-    // Rotate car by rotating first the canvas and then drawing the car
-    ctx.translate(this.x, this.y); // Center the context where we have the car
-    ctx.rotate(-this.angle);
-
-    ctx.beginPath();
-    ctx.rect( // Already at center of car thanks to ctx.translate
-      -this.width/2,
-      -this.height/2,
-      this.width,
-      this.height
-    );
-    ctx.fill();
-
-    ctx.restore(); // Otherwise we translate and rotate on each frame
   }
 }
