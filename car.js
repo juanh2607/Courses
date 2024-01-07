@@ -21,19 +21,22 @@ class Car {
     this.angle = 0;
 
     this.controls = new Controls();
+    this.sensor = new Sensor(this);
   }
 
   /**
    * Update the position of the car
    */
-  update() {
+  update(roadBorders) {
     this.#move();
+    this.sensor.update(roadBorders);
   }
 
   /**
    * @param {CanvasRenderingContext2D} ctx 
    */
   draw(ctx) {
+    
     // Save current state because we will translate and rotate the canvas for 
     // this particular draw.
     ctx.save(); 
@@ -49,8 +52,9 @@ class Car {
       this.height
     );
     ctx.fill();
-
     ctx.restore(); // Otherwise we translate and rotate on each frame
+    
+    this.sensor.draw(ctx);
   }
 
   #move() {
