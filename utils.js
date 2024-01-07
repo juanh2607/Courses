@@ -46,3 +46,29 @@ function getIntersection(A, B, C, D) {
   // If bottom = 0, then the lines are parallel
   return null;
 }
+
+/**
+ * 
+ * @param {Array<2dCoordinate>} poly1 
+ * @param {Array<2dCoordinate>} poly2 
+ */
+function polysIntersect(poly1, poly2) {
+  for (var i = 0; i < poly1.length; i++) {
+    for (var j = 0; j < poly2.length; j++) {
+      const touch = getIntersection(
+        poly1[i],
+        // poly1[i+1] will break when i = poly1.length - 1 (out of bounds). To
+        // solve that we apply % so when that happens the % returns 0.
+        // Also useful because the last point from the polygon needs to connect 
+        // with the first one
+        poly1[(i+1) % poly1.length],
+        poly2[j],
+        poly2[(j+1) % poly2.length]
+      )
+      if (touch) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

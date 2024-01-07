@@ -13,12 +13,15 @@ class Car {
     this.y = y;
     this.width = width;
     this.height = height;
+    this.polygon = null;
 
     this.speed = 0;
     this.acceleration = 0.2;
     this.maxSpeed = 3;
     this.friction = 0.05;
     this.angle = 0;
+
+    this.damaged = false;
 
     this.controls = new Controls();
     this.sensor = new Sensor(this);
@@ -28,7 +31,11 @@ class Car {
    * Update the position of the car
    */
   update(roadBorders) {
-    this.#move();
+    if (!this.damaged) {
+      this.#move();
+      this.polygon = this.#createPolygon();
+      this.damaged = this.#assessDamage(roadBorders);
+    }
     this.sensor.update(roadBorders);
   }
 
@@ -36,23 +43,20 @@ class Car {
    * @param {CanvasRenderingContext2D} ctx 
    */
   draw(ctx) {
-    
-    // Save current state because we will translate and rotate the canvas for 
-    // this particular draw.
-    ctx.save(); 
-    // Rotate car by rotating first the canvas and then drawing the car
-    ctx.translate(this.x, this.y); // Center the context where we have the car
-    ctx.rotate(-this.angle);
+    if (this.damaged) {
+      ctx.fillStyle = "gray";
+    } else {
+      ctx.fillStyle = "black";
+    }
 
     ctx.beginPath();
-    ctx.rect( // Already at center of car thanks to ctx.translate
-      -this.width/2,
-      -this.height/2,
-      this.width,
-      this.height
-    );
+    ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
+
+    for (var i = 1; i < this.polygon.length; i++) {
+      ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
+    }
+    
     ctx.fill();
-    ctx.restore(); // Otherwise we translate and rotate on each frame
     
     this.sensor.draw(ctx);
   }
@@ -88,5 +92,42 @@ class Car {
     
     this.x -= this.speed * Math.sin(this.angle);
     this.y -= this.speed * Math.cos(this.angle);
+  }
+
+  #createPolygon() {
+    const points = []; // Coordinates of the car's corners
+    const radius = Math.hypot(this.width/2, this.height/2);
+    const alpha  = Math.atan2(this.width, this.height);
+    
+    points.push({ // Top right point
+      x: this.x - Math.sin(this.angle - alpha) * radius,
+      y: this.y - Math.cos(this.angle - alpha) * radius
+    });
+    
+    points.push({ // Top left point
+      x: this.x - Math.sin(this.angle + alpha) * radius,
+      y: this.y - Math.cos(this.angle + alpha) * radius
+    });
+    
+    points.push({ // Bottom right point
+      x: this.x - Math.sin(Math.PI + this.angle - alpha) * radius,
+      y: this.y - Math.cos(Math.PI + this.angle - alpha) * radius
+    });
+
+    points.push({ // Bottom left point
+      x: this.x - Math.sin(Math.PI + this.angle + alpha) * radius,
+      y: this.y - Math.cos(Math.PI + this.angle + alpha) * radius
+    });
+    
+    return points;
+  }
+
+  #assessDamage(roadBorders) {
+    for (var i = 0; i < roadBorders.length; i++) {
+      if (polysIntersect(this.polygon, roadBorders[i])) {
+        return true;
+      }
+    }
+    return false;
   }
 }
