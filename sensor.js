@@ -17,12 +17,20 @@ class Sensor {
     this.readings = []; // Stores for each ray if there is a border and how far 
   }
 
-  update(roadBorders) {
+  /**
+   * @param {Array<number>} roadBorders - [beginning, end] pairs
+   * @param {Array<Car>} traffic
+   */
+  update(roadBorders, traffic) {
     this.#castRays();
     this.readings = [];
-    for (var i = 0; i < this.rays.length; i++) {
+    for (var i = 0; i < this.rays.length; i++) { // Read Borders
       this.readings.push(
-        this.#getReading(this.rays[i], roadBorders)
+        this.#getReading(
+          this.rays[i], 
+          roadBorders,
+          traffic
+        )
       );
     }
 
@@ -71,10 +79,11 @@ class Sensor {
    * Checks if the ray comes into contact with the road border
    * @param {Array<number>} ray - Array with beginning and end coordinates 
    * @param {Array<Array<number>>} roadBorders - Each roadBorder has a beginning and end coordinate
+   * @param {Array<Car>} traffic 
    * @returns {null|Intersection} Returns null if the ray doesn't touch any road border, 
    *  otherwise returns the nearest intersection
    */
-  #getReading(ray, roadBorders) {
+  #getReading(ray, roadBorders, traffic) {
     var touches = [];
 
     for (var i = 0; i < roadBorders.length; i++) {
@@ -87,6 +96,21 @@ class Sensor {
 
       if (touch) {
         touches.push(touch);
+      }
+    }
+
+    for (var i = 0; i < traffic.length; i++) {
+      const poly = traffic[i].polygon;
+      for (var j = 0; j < poly.length; j++) {
+        const value = getIntersection(
+          ray[0],
+          ray[1],
+          poly[j],
+          poly[(j+1) % poly.length]
+        );
+        if (value) {
+          touches.push(value);
+        }
       }
     }
 
