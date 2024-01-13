@@ -24,8 +24,15 @@ class Car {
 
     this.damaged = false;
 
+    this.useBrain = controlType == "AI";
+
     if (controlType != "DUMMY") {
       this.sensor = new Sensor(this);
+      const controlNeurons = 4;
+      this.brain  = new NeuralNetwork(
+        // Set as many layers as you want in between. 
+        [this.sensor.rayCount, 6, controlNeurons]
+      );
     }
     
     this.controls = new Controls(controlType);
@@ -44,6 +51,20 @@ class Car {
     }
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
+      const offsets = this.sensor.readings.map(s =>
+        // If the sensor is null, it sees nothing. If it isn't null, we want to
+        // have small numbers when it is far away and close to one when it is near
+        s == null ? 0 : 1 - s.offset
+      );
+      // The outputs are [up, left, right, down] with values of 0 or 1.
+      const outputs = NeuralNetwork.feedForward(offsets, this.brain);
+      
+      if (this.useBrain) {
+        this.controls.forward = outputs[0];
+        this.controls.left    = outputs[1];
+        this.controls.right   = outputs[2];
+        this.controls.reverse = outputs[3];
+      }
     }
   }
 
