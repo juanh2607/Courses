@@ -1,10 +1,14 @@
 // Set canvas size (where the road will be shown)
-const canvas = document.getElementById("myCanvas");
-canvas.width = 200;
+const carCanvas = document.getElementById("carCanvas");
+carCanvas.width = 200;
 
-const ctx = canvas.getContext("2d");
+const networkCanvas = document.getElementById("networkCanvas");
+networkCanvas.width = 300;
 
-const road = new Road(canvas.width/2, canvas.width*0.9);
+const carCtx = carCanvas.getContext("2d");
+const networkCtx = networkCanvas.getContext("2d");
+
+const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
 const car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
 
 const traffic = [
@@ -23,20 +27,24 @@ function animate() {
   car.update(road.borders, traffic);
   // Solving to issues at once: resizing if the window changes and resizing 
   // forces to clear the canvas.
-  canvas.height = window.innerHeight;
+  carCanvas.height = window.innerHeight;
+  networkCanvas.height = window.innerHeight;
 
-  ctx.save();
+  carCtx.save();
   // Camera above the car view. The translation affects how the objects are being drawn
-  ctx.translate(0, -car.y + canvas.height*0.7);
-  road.draw(ctx);
+  carCtx.translate(0, -car.y + carCanvas.height*0.7);
+  road.draw(carCtx);
 
   for (var i = 0; i < traffic.length; i++) {
-    traffic[i].draw(ctx, "blue");
+    traffic[i].draw(carCtx, "blue");
   }
 
-  car.draw(ctx, "black");
+  car.draw(carCtx, "black");
   
-  ctx.restore(); // The canvas is still, the drawings move
+  carCtx.restore(); // The canvas is still, the drawings move
+  
+  Visualizer.drawNetwork(networkCtx, car.brain);
+  
   requestAnimationFrame(animate);
 }
 

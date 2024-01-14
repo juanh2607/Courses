@@ -4,6 +4,9 @@ body{
   overflow:hidden; /* To not show scroll bar*/
   text-align:center;
 }
-#myCanvas{
+#carCanvas{
   background:lightgray;
+}
+#networkCanvas{
+  background:black;
 }

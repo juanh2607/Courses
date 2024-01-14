@@ -37,20 +37,20 @@ class NeuralNetwork {
 class Level {
   /**
    * @param {number} inputCount 
-   * @param {number} outPutCount 
+   * @param {number} outputCount 
    */
-  constructor(inputCount, outPutCount) {
+  constructor(inputCount, outputCount) {
     this.inputs  = new Array(inputCount);
-    this.outPuts = new Array(outPutCount);
+    this.outputs = new Array(outputCount);
     // Each output neuron has a bias: it's the value above which it will fire
-    this.biases  = new Array(outPutCount); 
+    this.biases  = new Array(outputCount); 
     // Weight for each input - output connection. It is a value between -1 and 1
     // We use positive and negative values to express "turn or don't turn to right"
     // where "don't turn" means "turn left"
     this.weights = [];
     // For each input node we have an output amount of connections
     for (var i = 0; i < inputCount; i++) {
-      this.weights[i] = new Array(outPutCount);
+      this.weights[i] = new Array(outputCount);
     }
     // For now, we will begin with a random brain
     Level.#randomize(this);
@@ -63,7 +63,7 @@ class Level {
    */
   static #randomize(level) {
     for (var i = 0; i < level.inputs.length; i++) {
-      for (var j = 0; j < level.outPuts.length; j++) {
+      for (var j = 0; j < level.outputs.length; j++) {
         level.weights[i][j] = Math.random() * 2 - 1; // [-1, 1]
       }
     }
@@ -84,19 +84,19 @@ class Level {
     }
 
     // Calculate a sum between the value of the inputs and the weight
-    for (var i = 0; i < level.outPuts.length; i++) {
+    for (var i = 0; i < level.outputs.length; i++) {
       var sum = 0;
       for (var j = 0; j < level.inputs.length; j++) {
         sum += level.inputs[j] * level.weights[j][i];
       }
 
       if (sum > level.biases[i]) { // Turn on the output
-        level.outPuts[i] = 1; 
+        level.outputs[i] = 1; 
       } else { // Turn off the output
-        level.outPuts[i] = 0;
+        level.outputs[i] = 0;
       }
     }
 
-    return level.outPuts;
+    return level.outputs;
   }
 }
