@@ -71,8 +71,9 @@ class Car {
   /**
    * @param {CanvasRenderingContext2D} ctx 
    * @param {string} color
+   * @param {boolean} drawSensor
    */
-  draw(ctx, color) {
+  draw(ctx, color, drawSensor = false) {
     if (this.damaged) {
       ctx.fillStyle = "gray";
     } else {
@@ -88,7 +89,7 @@ class Car {
     
     ctx.fill();
     
-    if (this.sensor) {
+    if (this.sensor && drawSensor) {
       this.sensor.draw(ctx);
     }
   }

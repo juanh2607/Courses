@@ -1,12 +1,29 @@
-body{
-  margin:0;
-  background:darkgray;
-  overflow:hidden; /* To not show scroll bar*/
-  text-align:center;
+body {
+  margin: 0;
+  background: darkgray;
+  overflow: hidden; /* To not show scroll bar*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#carCanvas{
-  background:lightgray;
+#carCanvas {
+  background: lightgray;
 }
-#networkCanvas{
-  background:black;
+#networkCanvas {
+  background: black;
+}
+#verticalButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  padding: 5px 5px 7px 5px;
+  margin: 2px;
+  cursor: pointer;
+}
+button:hover {
+  background: lightblue;
 }

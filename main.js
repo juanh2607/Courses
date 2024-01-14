@@ -9,7 +9,14 @@ const carCtx = carCanvas.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
-const car = new Car(road.getLaneCenter(1), 100, 30, 50, "AI");
+
+const N = 100;
+const cars = generateCars(N);
+let bestCar = cars[0];
+const bestBrain = localStorage.getItem("bestBrain");
+if (bestBrain) {
+  bestCar.brain = JSON.parse(bestBrain);
+}
 
 const traffic = [
   new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2)
@@ -17,14 +24,21 @@ const traffic = [
 
 animate();
 
-function animate() {
+function animate(time) {
   for (var i = 0; i < traffic.length; i++) {
     // TODO: por ahora esto puede ir en el segundo loop (no se xq lo hace asi)
     // For now traffic is not able to be damaged by other cars
     traffic[i].update(road.borders, []);
   }
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].update(road.borders, traffic);
+  }
 
-  car.update(road.borders, traffic);
+  bestCar = cars.find(car =>
+    // Fitness Function
+    car.y == Math.min(...cars.map(c => c.y))
+  );
+
   // Solving to issues at once: resizing if the window changes and resizing 
   // forces to clear the canvas.
   carCanvas.height = window.innerHeight;
@@ -32,19 +46,52 @@ function animate() {
 
   carCtx.save();
   // Camera above the car view. The translation affects how the objects are being drawn
-  carCtx.translate(0, -car.y + carCanvas.height*0.7);
+  carCtx.translate(0, -bestCar.y + carCanvas.height*0.7);
   road.draw(carCtx);
 
   for (var i = 0; i < traffic.length; i++) {
     traffic[i].draw(carCtx, "blue");
   }
-
-  car.draw(carCtx, "black");
+  carCtx.globalAlpha = 0.2;
+  for (let i = 0; i < cars.length; i++) {
+    cars[i].draw(carCtx, "black");
+  }
+  carCtx.globalAlpha = 1;
+  bestCar.draw(carCtx, "black", true);
   
   carCtx.restore(); // The canvas is still, the drawings move
   
-  Visualizer.drawNetwork(networkCtx, car.brain);
+  networkCtx.lineDashOffset = -time/50;
+  Visualizer.drawNetwork(networkCtx, bestCar.brain);
   
   requestAnimationFrame(animate);
+}
+
+/**
+ * @param {number} N - Amount of cars generated 
+ * @returns {Array<Car>} 
+ */
+function generateCars(N) {
+  const cars = [];
+  for(let i = 1; i <= N; i++) {
+    cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI"));
+  }
+  return cars;
+}
+
+/**
+ * Save the best neural network from the current run
+ */
+function save() {
+  localStorage.setItem("bestBrain",
+    JSON.stringify(bestCar.brain)
+  );
+}
+
+/**
+ * Discards the last saved neural network
+ */
+function discard() {
+  localStorage.removeItem("bestBrain");
 }
 
