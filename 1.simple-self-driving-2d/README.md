@@ -7,8 +7,10 @@ This course uses JavaScript and the 2D canvas to create a self driving car simul
 
 The end result looks something like this:
 
-![](assets/self-driving-2d.png)
-![](assets/self-driving-2d.gif)
+<p align="center">
+  <img src="assets/self-driving-2d.png" alt="Alternate Text" width=300><br>
+  <img src="assets/self-driving-2d.gif" alt="Alternate Text">
+</p>
 
 ## Neural Network Visualization
 
