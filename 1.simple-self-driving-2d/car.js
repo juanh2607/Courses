@@ -9,7 +9,7 @@ class Car {
    * @param {number} height 
    * @param {string} controlType - KEYS or DUMMY
    */
-  constructor(x, y, width, height, controlType, maxSpeed = 3) {
+  constructor(x, y, width, height, controlType, maxSpeed = 3, color = "white") {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -36,6 +36,27 @@ class Car {
     }
     
     this.controls = new Controls(controlType);
+  
+    this.img = new Image();
+    this.img.src = "car.png";
+    // Create a "mini canvas" where we will draw the car
+    this.mask = document.createElement('canvas');
+    this.mask.width = width;
+    this.mask.height = height;
+
+    const maskCtx = this.mask.getContext("2d");
+    this.img.onload = () => { // Arrow function so that "this" points to Car
+      maskCtx.fillStyle = color;
+      maskCtx.rect(0, 0, this.width, this.height);
+      maskCtx.fill();
+      
+      maskCtx.globalCompositeOperation = "destination-atop";
+      // Now the image is being drawn above the colored rectangle, and its going
+      // to keep the color only where it overlaps with the visible pixels of the image
+      maskCtx.drawImage(this.img, 0, 0, this.width, this.height);
+    }
+
+
   }
 
   /**
@@ -73,22 +94,27 @@ class Car {
    * @param {string} color
    * @param {boolean} drawSensor
    */
-  draw(ctx, color, drawSensor = false) {
-    if (this.damaged) {
-      ctx.fillStyle = "gray";
-    } else {
-      ctx.fillStyle = color;
+  draw(ctx, drawSensor = false) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(-this.angle);
+    if (!this.damaged) {
+      ctx.drawImage(this.mask,
+        -this.width / 2,
+        -this.height / 2,
+        this.width,
+        this.height
+      );
+      ctx.globalCompositeOperation = "multiply";
     }
-
-    ctx.beginPath();
-    ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
-
-    for (var i = 1; i < this.polygon.length; i++) {
-      ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
-    }
-    
-    ctx.fill();
-    
+    ctx.drawImage(this.img,
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    );
+    ctx.restore();
+  
     if (this.sensor && drawSensor) {
       this.sensor.draw(ctx);
     }

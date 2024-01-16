@@ -6,10 +6,11 @@ This course uses JavaScript and the 2D canvas to create a self driving car simul
 * A **neural network** for the car to learn how to drive without crashing, accompanied by a **visualization** of the network on real time
 
 The end result looks something like this:
-// TODO: add image of final result
+
+![](assets/self-driving-2d.png)
+![](assets/self-driving-2d.gif)
 
 ## Neural Network Visualization
-// TODO: add image of neural network
 
 The bottom level has a neuron for each ray sensor on the car. The closer the object, the more intensely the neuron will fire up. 
 

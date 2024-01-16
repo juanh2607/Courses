@@ -10,7 +10,7 @@ const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
 
-const N = 500;
+const N = 200 // Set amount of cars generated
 const cars = generateCars(N);
 let bestCar = cars[0];
 const bestBrain = localStorage.getItem("bestBrain");
@@ -24,15 +24,17 @@ if (bestBrain) {
 }
 
 const traffic = [
-  new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(0), -300, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(2), -300, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(0), -500, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(1), -500, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(1), -700, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(2), -700, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(0), -1000, 30, 50, "DUMMY", 2),
-  new Car(road.getLaneCenter(2), -1000, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(0), -300, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(2), -300, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(0), -500, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(1), -500, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(1), -700, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(2), -700, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(0), -900, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(1), -900, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(2), -11000, 30, 50, "DUMMY", 2, getRandomColor()),
+  new Car(road.getLaneCenter(1), -11000, 30, 50, "DUMMY", 2, getRandomColor()),
 
 ];
 
@@ -64,14 +66,14 @@ function animate(time) {
   road.draw(carCtx);
 
   for (var i = 0; i < traffic.length; i++) {
-    traffic[i].draw(carCtx, "blue");
+    traffic[i].draw(carCtx);
   }
   carCtx.globalAlpha = 0.2;
   for (let i = 0; i < cars.length; i++) {
-    cars[i].draw(carCtx, "black");
+    cars[i].draw(carCtx);
   }
   carCtx.globalAlpha = 1;
-  bestCar.draw(carCtx, "black", true);
+  bestCar.draw(carCtx, true);
   
   carCtx.restore(); // The canvas is still, the drawings move
   
