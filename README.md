@@ -9,3 +9,10 @@ Each folder contains a complete course with its own README explaining what I've 
 Here are the courses included in this repository:
 
 1. Self-Driving Car with JavaScript **(no libraries)** - Neural Networks and Machine Learning
+
+##  🚧 Ongoing Courses
+
+2. Rust-Practice
+    * Rust Book final example
+    * NeetCode: my solutions + tests
+    * Concurrente-FIUBA: code used in the course with my annotations and the final project (not yet started)
