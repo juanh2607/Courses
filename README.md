@@ -14,5 +14,5 @@ Here are the courses included in this repository:
 
 2. Rust-Practice
     * Rust Book final example
-    * NeetCode: my solutions + tests
+    * NeetCode: my solutions + tests. It also works as practice on how to create a library on rust
     * Concurrente-FIUBA: code used in the course with my annotations and the final project (not yet started)
