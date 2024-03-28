@@ -2,7 +2,7 @@ use crate::road_map::*;
 
 // TODO: determinar si vale la pena o no meter mejores nombres
 
-// Exercise 1 -----------------------------------------------------------------
+// Exercise 1 ------------------------------------------------------------------
 use self::arrays::contains_duplicate;
 
 #[test]
@@ -23,7 +23,7 @@ fn exercise_1_test_3() {
   assert!(contains_duplicate(nums));
 }
 
-// Exercise 2 -----------------------------------------------------------------
+// Exercise 2 ------------------------------------------------------------------
 use self::arrays::is_anagram;
 
 #[test]
@@ -40,7 +40,7 @@ fn exercise_2_test_2() {
 	assert!(!is_anagram(s, t));
 }
 
-// Exercise 3 -----------------------------------------------------------------
+// Exercise 3 ------------------------------------------------------------------
 use self::arrays::two_sum;
 
 #[test]
@@ -53,7 +53,7 @@ fn exercise_3_test_1() {
     assert!(correct_results.contains(&result));
 }
 
-// Exercise 4 -----------------------------------------------------------------
+// Exercise 4 ------------------------------------------------------------------
 use self::arrays::group_anagrams;
 
 #[test]
@@ -81,7 +81,7 @@ fn exercise_4_test_1() {
 	assert_eq!(result, expected);
 }
 
-// Exercise 5 -----------------------------------------------------------------
+// Exercise 5 ------------------------------------------------------------------
 use self::arrays::top_k_frequent;
 
 #[test]
@@ -98,7 +98,7 @@ fn exercise_5_test_2() {
 	assert_eq!(top_k_frequent(&nums, k), vec![2, 4, 1]);
 }
 
-// Exercise 6 -----------------------------------------------------------------
+// Exercise 6 ------------------------------------------------------------------
 use self::arrays::product_except_self;
 
 #[test]
@@ -115,7 +115,7 @@ fn exercise_6_test_2() {
 	assert_eq!(product_except_self(&nums), expected);
 }
 
-// Exercise 7 -----------------------------------------------------------------
+// Exercise 7 ------------------------------------------------------------------
 use self::arrays::is_valid_sudoku;
 
 #[test]
@@ -151,4 +151,45 @@ fn exercise_7_test_2() {
     ];
 
 	assert_eq!(is_valid_sudoku(&board), false);
+}
+
+// Exercise 8 ------------------------------------------------------------------
+use self::arrays::Codec;
+
+#[test]
+fn exercise_8_test_1() {
+	let strs: Vec<String> = vec!["we".to_string(),"say".to_string(),":".to_string(),"yes".to_string()];
+	let codec = Codec::new();
+	let encoded = codec.encode(&strs);
+
+	assert_eq!(codec.decode(&encoded), strs);
+}
+
+#[test]
+fn exercise_8_test_2() {
+	// TODO: ver de hacer esta macro para hacer más legible el código:
+	// macro_rules! vec_of_strings {
+	// 	($($x:expr),*) => (vec![$($x.to_string()),*]);
+	// }
+
+	let strs: Vec<String> = vec!["neet".to_string(),"code".to_string(),"love".to_string(),"you".to_string()];
+	let codec = Codec::new();
+	let encoded = codec.encode(&strs);
+
+	assert_eq!(codec.decode(&encoded), strs);
+}
+
+// Exercise 9 ------------------------------------------------------------------
+use self::arrays::longest_consecutive;
+
+#[test]
+fn exercise_9_test_1() {
+	let nums = vec![100,4,200,1,3,2];
+	assert_eq!(longest_consecutive(nums), 4);
+}
+
+#[test]
+fn exercise_9_test_2() {
+	let nums = vec![0,3,7,2,5,8,4,6,0,1];
+	assert_eq!(longest_consecutive(nums), 9);
 }

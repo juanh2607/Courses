@@ -254,3 +254,111 @@ pub fn is_valid_sudoku(board: &Vec<Vec<char>>) -> bool {
 
     true
 }
+
+// 8. String Encode and Decode -------------------------------------------------
+// Design an algorithm to encode a list of strings to a single string. 
+// The encoded string is then decoded back to the original list of strings.
+
+// Esta es más una pregunta de diseño.
+// Forma naive es usar un único char "especial" como delimiter pero es 
+// "bastante" posible que genere fallas ya que puede usarse en cualquier otro
+// contexto ese char.
+// Como hacemos para que no entre en juego la probabilidad de casualmente 
+// encontrarse con el delimiter?
+// Aplicamos el siguiente protocolo:
+// <n>#<n chars>
+// Es decir: cada palabra va a empezar con un entero que me indica la longitud 
+// la palabra. Además se que voy a tener que leer bytes para el número hasta 
+// encontrarme con un #. Luego simplemente leo n bytes, no me importa lo que haya
+// dentro del string.
+
+pub struct Codec {}
+
+impl Codec {
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    const DELIM: char = '#';
+
+    // Encodes an array of strings into a single string
+    pub fn encode(&self, strs: &Vec<String>) -> String {
+        let mut encoded = String::new();
+
+        for word in strs {
+            encoded.push_str(&word.len().to_string());
+            encoded.push(Self::DELIM);
+            encoded.push_str(word);
+        }
+
+        encoded
+    }
+
+    pub fn decode(&self, s: &String) -> Vec<String> {
+        let mut decoded: Vec<String> = vec![];
+        let mut i = 0;
+
+        while i < s.len() {
+            let delim_index = s[i..].find(Self::DELIM);
+
+            if let Some(index) = delim_index {
+                // Obtengo longitud de la palabra
+                let len_str = &s[i..(i + index)];
+
+                // TODO: en una aplicación sería no paniqueas acá si falla
+                // solo retornarias un error. Podrías testearlo también.
+                let len = len_str.parse::<usize>().unwrap();
+                // Leo la palabra
+                let start = i + index + 1;
+                let end   = i + index + 1 + len;
+                let word = &s[start..end];
+
+                decoded.push(word.to_string());
+
+                i += index + 1 + len;
+            } else { // No hay más delimitador
+                break; 
+            }
+        }
+
+        decoded
+    }
+}
+
+// 9. Longest Consecutive Sequence ---------------------------------------------
+// Given an unsorted array of integers nums, return the length of the longest 
+// consecutive elements sequence.
+
+// You must write an algorithm that runs in O(n) time.
+pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
+    // No podés ordenar ya que eso es O(n*log n)
+    // 1. Convertís el vector a un HashSet (O(n))
+    // 2. Vas a buscar a todos los números que comienzen una secuencia. Como?
+    //    Te fijás si en el HashSet se encuentra su anterior (O(1))
+    // 3. Si es un primer elemento, creas un vector con ese.
+    // 4. Intentas "agrandar" el vector lo más que puedas, buscando el siguiente valor
+    // 5. Guardas el resultado y seguís con la siguiente secuencia.
+
+    // Costo? Cada número lo vas a leer como mucho 2 veces: siempre tenés que leer
+    // todo el vector y después tenés que buscar los secuenciales por cada inicio de
+    // secuencia. Esto es O(2n) = O(n), mucho mejor que O(n * log n)
+    let hset: HashSet<i32> = nums.into_iter().collect();
+    let mut longest = 0;
+
+    for n in &hset {
+        // Checkeo si es el primero de una secuencia
+        if !hset.contains(&(n - 1)) {
+            let mut current_len = 1;
+            // Cuento hasta que se corte la secuencia
+            while hset.contains(&(n + current_len)) {
+                current_len += 1;
+            }
+
+            if current_len > longest {
+                longest = current_len;
+            }
+        } 
+    }
+
+    longest
+}
