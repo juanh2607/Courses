@@ -1,6 +1,6 @@
 use crate::road_map::*;
 
-// TODO: determinar si vale la pena o no meter mejores nombres
+// TODO: determinar si vale la pena o no meter mejores nombres para los tests
 
 // Exercise 1 ------------------------------------------------------------------
 use self::arrays::contains_duplicate;
