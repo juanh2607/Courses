@@ -84,6 +84,73 @@ pub fn exercise_4_test_2() {
     assert_eq!(generate_parenthesis(1), expected);
 }
 
-// Exercise 1 ------------------------------------------------------------------
-// Exercise 1 ------------------------------------------------------------------
-// Exercise 1 ------------------------------------------------------------------
+// Exercise 5 ------------------------------------------------------------------
+use self::stack::daily_temperatures;
+
+#[test]
+pub fn exercise_5_test_1() {
+    let temperatures = vec![73,74,75,71,69,72,76,73];
+    let expected = vec![1,1,4,2,1,1,0,0];
+
+    assert_eq!(daily_temperatures(temperatures), expected);
+}
+
+#[test]
+pub fn exercise_5_test_2() {
+    let temperatures = vec![30,40,50,60];
+    let expected = vec![1,1,1,0];
+
+    assert_eq!(daily_temperatures(temperatures), expected);
+}
+
+#[test]
+pub fn exercise_5_test_3() {
+    let temperatures = vec![30,60,90];
+    let expected = vec![1,1,0];
+
+    assert_eq!(daily_temperatures(temperatures), expected);
+}
+// Exercise 6 ------------------------------------------------------------------
+use self::stack::car_fleet;
+
+#[test]
+pub fn exercise_6_test_1() {
+    let target = 12; 
+    let position = vec![10,8,0,5,3];
+    let speed = vec![2,4,1,1,3];
+
+    assert_eq!(car_fleet(target, position, speed), 3);
+}
+
+#[test]
+pub fn exercise_6_test_2() {
+    let target = 10; 
+    let position = vec![3];
+    let speed = vec![1];
+
+    assert_eq!(car_fleet(target, position, speed), 1);
+}
+
+#[test]
+pub fn exercise_6_test_3() {
+    let target = 100; 
+    let position = vec![0,2,4];
+    let speed = vec![4,2,1];
+
+    assert_eq!(car_fleet(target, position, speed), 1);
+}
+
+// Exercise 7 ------------------------------------------------------------------
+use self::stack::largest_rectangle_area;
+
+#[test]
+pub fn exercise_7_test_1() {
+    let heights = vec![2,4];
+    assert_eq!(largest_rectangle_area(heights), 4);
+}
+
+#[test]
+pub fn exercise_7_test_2() {
+    let heights = vec![2,1,5,6,2,3];
+    assert_eq!(largest_rectangle_area(heights), 10);
+}
