@@ -1,6 +1,3 @@
-// El objetivo del lexer es tomar el código fuente y partirlo en "tokens", que
-// son unidades léxicas más pequeñas y fáciles de comprender.
-// Este "tokenizado" es el primer paso que realiza el interprete.
 package token
 
 type TokenType string
@@ -22,8 +19,16 @@ const (
 	INT   = "INT"
 
 	// Operators
-	ASSIGN = "="
-	PLUS   = "+"
+	ASSIGN   = "="
+	PLUS     = "+"
+	MINUS    = "-"
+	BANG 	 = "!"
+	ASTERISK = "*"
+	SLASH    = "/"
+	LT       = "<"
+	GT       = ">"
+	EQ       = "=="
+	NOT_EQ   = "!="
 
 	// Delimiters
 	COMMA     = ","
@@ -37,4 +42,30 @@ const (
 	// Keywords
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
+	TRUE 	 = "TRUE"
+	FALSE 	 = "FALSE"
+	IF       = "IF"
+	ELSE     = "ELSE"
+	RETURN   = "RETURN"
 )
+
+var keywords = map[string]TokenType {
+	"fn": FUNCTION,
+	"let": LET,
+	"true": TRUE,
+	"false": FALSE,
+	"if": IF,
+	"else": ELSE,
+	"return": RETURN,
+}
+
+// Defines if the identifier is a keyword or a regular identifier
+func LookupIdentifier(identifier string) TokenType {
+	// "Asignación con Comprobación de Existencia". Si ok es true =>
+	// ya te queda asignado el valor. 2 pájaros de un tiro
+	if tok, ok := keywords[identifier]; ok {
+		return tok
+	}
+
+	return IDENT
+}
