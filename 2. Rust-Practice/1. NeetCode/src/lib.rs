@@ -3,6 +3,7 @@ pub mod road_map {
     pub mod two_pointers;
     pub mod stack;
     pub mod binary_search;
+    pub mod sliding_window;
 }
 
 // TODO: los más difíciles valen la pena repasarlos. Metete en los comentarios 

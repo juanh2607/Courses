@@ -14,3 +14,5 @@ Here are the courses included in this repository:
 
 2. Rust-Practice
     * NeetCode: my solutions + tests. It also works as practice on how to create a library on rust
+
+3. Writing an Interpreter in Go - From the book by Thorsten Ball

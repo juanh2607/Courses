@@ -3,3 +3,4 @@ mod arrays_t;
 mod two_pointers_t;
 mod stack_t;
 mod binary_search_t;
+mod sliding_window_t;
